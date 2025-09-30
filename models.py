@@ -8,7 +8,6 @@ class CreateNote(BaseModel):
     note: str
     deadline: str
 
-class UpdateNote(BaseModel):
-    note_id: int
+class UpdateNoteData(BaseModel):
     note: Optional[str] = None
     deadline: Optional[str] = None
