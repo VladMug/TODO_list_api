@@ -3,11 +3,10 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class CreateNote(BaseModel):
+class DataForCreateNote(BaseModel):
     user_id: int
     note: str
-    deadline: str
 
-class UpdateNoteData(BaseModel):
+class DataForUpdateNote(BaseModel):
     note: Optional[str] = None
-    deadline: Optional[str] = None
+    status: Optional[str] = None

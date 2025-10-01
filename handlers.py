@@ -3,7 +3,7 @@
 from db import get_connection
 from encoder import decode_note, encode_note
 
-from config.config import NOTE_KEYS
+from config.config import NOTE_KEYS, STATUSES_NAME
 
 # CREATE
 def get_note_by_id(note_id: int) -> dict | None:
@@ -35,12 +35,11 @@ def insert_row(data: dict) -> int | None:
         conn.commit()
         return cursor.lastrowid
 
-def create_note(user_id:int, note:str, deadline:str) -> dict:
+def create_note(user_id:int, note:str) -> dict:
     encoded_note = encode_note(note)
     data = {
         'user_id': user_id,
         'note': encoded_note,
-        'deadline': deadline
     }
     note_id = insert_row(data)
     return get_note_by_id(note_id)
@@ -79,14 +78,17 @@ def update_row(note_id, data) -> int:
         conn.commit()
         return cursor.rowcount
 
-def update_note(note_id: int, note: str = None, deadline: str = None) -> dict | None:
-    if note is None and deadline is None:
+def update_note(note_id: int, note: str = None, status: str = None) -> dict | None:
+    if note is None and status is None:
         raise ValueError('No arguments for update')
     data = {}
     if note is not None:
         data['note'] = encode_note(note)
-    if deadline is not None: 
-        data['deadline'] = deadline
+    if status is not None: 
+        if status in STATUSES_NAME.values():
+            data['status'] = status
+        else:
+            raise ValueError('Invalid status name')
     updated = update_row(note_id, data)
     if updated == 1:
         return get_note_by_id(note_id)

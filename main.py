@@ -2,11 +2,10 @@
 
 from fastapi import FastAPI, status
 from starlette.responses import JSONResponse
-from typing import Optional
 
 from db import init_db
 from handlers import create_note, get_notes, delete_note, update_note
-from models import CreateNote, DataForUpdateNote
+from models import DataForCreateNote, DataForUpdateNote
 
 init_db()
 
@@ -14,8 +13,8 @@ app = FastAPI()
 
 # CREATE
 @app.post('/notes')
-async def create_item(note: CreateNote):
-    result = create_note(note.user_id, note.note, note.deadline)
+async def create_item(note: DataForCreateNote):
+    result = create_note(note.user_id, note.note)
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
         content=result
@@ -27,7 +26,7 @@ async def get_items(user_id: int):
     return get_notes(user_id)
 
 # UPDATE
-@app.put('/notes/{note_id}')
+@app.patch('/notes/{note_id}')
 async def update_item(note_id: int, note: DataForUpdateNote):
     result = update_note(note_id, note.note, note.deadline)
     success = False
@@ -49,7 +48,7 @@ async def delete_item(note_id: int):
 
 if __name__ == '__main__':
     print(1)
-    # print(create_note(123, 'fortnit', '19-09-2025'))
+    # print(create_note(123, 'aboba'))
     # for i in get_notes(123): print(i)
-    # print(update_note(30, 'boblox'))
+    # print(update_note(3, status='in sosi'))
     # print(delete_note(10))
