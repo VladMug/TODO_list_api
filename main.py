@@ -1,4 +1,3 @@
-# Точка входа и запуск FastAPI
 
 from fastapi import FastAPI, status
 from starlette.responses import JSONResponse
@@ -48,6 +47,7 @@ async def delete_item(note_id: int):
 
 if __name__ == '__main__':
     print(1)
+    # print(get_notes(status='not started'))
     # print(create_note(123, 'aboba'))
     # for i in get_notes(123): print(i)
     # print(update_note(3, status='in sosi'))

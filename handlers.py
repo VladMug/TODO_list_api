@@ -6,19 +6,6 @@ from encoder import decode_note, encode_note
 from config.config import NOTE_KEYS, STATUSES_NAME
 
 # CREATE
-def get_note_by_id(note_id: int) -> dict | None:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            'SELECT * FROM notes WHERE note_id = ?', (note_id,)
-        )
-        note = cursor.fetchone()
-        if note is not None:
-            note = format_note(note)
-            return note
-        else:
-            return None
-
 def insert_row(data: dict) -> int | None: 
     if not data:
         raise ValueError('No data to insert')
@@ -42,7 +29,7 @@ def create_note(user_id:int, note:str) -> dict:
         'note': encoded_note,
     }
     note_id = insert_row(data)
-    return get_note_by_id(note_id)
+    return get_notes(note_id=note_id)
 
 # READ
 # Преобразует tuple в dict и расшифровывает в нем текст заметки
@@ -50,21 +37,35 @@ def format_note(note: tuple) -> dict:
     note_dict = dict(zip(NOTE_KEYS.values(), note))
     note_dict['note'] = decode_note(note_dict['note'])
     return note_dict
+        
+def get_notes(note_id: int | None = None, user_id: int | None = None, status: str | None = None) -> list[dict]:
+    values = []
+    cols = []
 
-def get_notes(user_id:int) -> list[dict] | None: 
+    if note_id is not None:
+        values.append(note_id)
+        cols.append('note_id')
+    if user_id is not None:
+        values.append(user_id)
+        cols.append('user_id')
+    if status is not None:
+        values.append(status)
+        cols.append('status')
+
+    # формируем SQL
+    sql = 'SELECT * FROM notes'
+    if cols:
+        placeholder = ' AND '.join(f'{col} = ?' for col in cols)
+        sql += f' WHERE {placeholder}'
+
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
-            'SELECT * FROM notes WHERE user_id = ?' , (user_id,)
-        )
-        notes_data = cursor.fetchall() 
-        if notes_data:
-            return [format_note(note) for note in notes_data]
-        else:
-            return []
+        cursor.execute(sql, tuple(values))
+        return [format_note(note) for note in cursor.fetchall()]
+
 
 # UPDATE
-def update_row(note_id, data) -> int:
+def update_row(note_id: int, data: dict) -> int:
     if not data:
         raise ValueError('No data to update')
     if not all(c in NOTE_KEYS.values() for c in data.keys()):
@@ -78,7 +79,7 @@ def update_row(note_id, data) -> int:
         conn.commit()
         return cursor.rowcount
 
-def update_note(note_id: int, note: str = None, status: str = None) -> dict | None:
+def update_note(note_id: int, note: str | None = None, status: str | None = None) -> dict | None:
     if note is None and status is None:
         raise ValueError('No arguments for update')
     data = {}
@@ -91,7 +92,7 @@ def update_note(note_id: int, note: str = None, status: str = None) -> dict | No
             raise ValueError('Invalid status name')
     updated = update_row(note_id, data)
     if updated == 1:
-        return get_note_by_id(note_id)
+        return get_notes(note_id=note_id)
     return None
         
 # DELETE
