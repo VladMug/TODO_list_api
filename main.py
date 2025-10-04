@@ -20,9 +20,13 @@ async def create_item(note: DataForCreateNote):
     )
 
 # READ
-@app.get('/users/{user_id}/notes')
-async def get_items(user_id: int):
-    return get_notes(user_id)
+@app.get('/notes')
+async def get_notes_api(
+    note_id: int | None = None,
+    user_id: int | None = None,
+    status: str | None = None
+):
+    return get_notes(note_id, user_id, status) # переписать под новую версию
 
 # UPDATE
 @app.patch('/notes/{note_id}')
