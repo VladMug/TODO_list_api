@@ -34,7 +34,7 @@ def create_note(user_id:int, note:str, db_path: str | None = None) -> dict:
     return get_notes(note_id=note_id)
 
 # READ
-# Преобразует tuple в dict и расшифровывает в нем текст заметки
+# Converts a tuple to a dict and decrypts the note text into it
 def format_note(note: tuple) -> dict: 
     note_dict = dict(zip(NOTE_KEYS.values(), note))
     note_dict['note'] = decode_note(note_dict['note'])

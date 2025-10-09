@@ -1,4 +1,4 @@
-# Подключение и инициализация базы данных
+# Connecting and initializing the database
 import sqlite3
 from config.config import DATABASE_PATH, STATUSES_NAME
 

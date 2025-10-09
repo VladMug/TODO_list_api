@@ -1,4 +1,4 @@
-# Pydantic-модели (схемы запросов/ответов)
+# Pydantic-models
 
 from pydantic import BaseModel
 

@@ -1,4 +1,4 @@
-# Тесты (pytest)
+# Pytest
 
 import pytest
 import sys
