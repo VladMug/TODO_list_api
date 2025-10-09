@@ -26,7 +26,7 @@ async def get_notes_api(
     user_id: int | None = None,
     status: str | None = None
 ):
-    return get_notes(note_id, user_id, status) # переписать под новую версию
+    return get_notes(note_id, user_id, status)
 
 # UPDATE
 @app.patch('/notes/{note_id}')
