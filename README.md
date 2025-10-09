@@ -13,15 +13,22 @@ It implements basic CRUD operations for managing TODO notes.
 4. (Optional) You can test the CRUD operations in main.py by uncommenting them at the end of the file.
   
 ## How it works
-This api can CREATE, READ, UPDATE and DELETE notes form database.
-In data base note look like:
-   ```json 
-   {"note_id": int, "user_id": int, "note": encrypted str, "status": "not started"/"in progress"/"completed"}
-   ```
+
+This API can **create**, **read**, **update**, and **delete** notes in the database.  
+Each note in the database looks like this:
+
+```json
+{
+  "note_id": int,
+  "user_id": int,
+  "note": "encrypted string",
+  "status": "not started" | "in progress" | "completed"
+}
+```
 * **note_id** is autoincrement
 * **user_id** is passed when creating a note
 * **note** is passed when creating a note and encrypted 
-* **status** is passed whe creating a note 
+* **status** is passed when creating a note 
 ---
 
 ## Endpoints
