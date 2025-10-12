@@ -9,6 +9,12 @@ load_dotenv(dotenv_path)
 DATABASE_PATH = os.getenv('DATABASE_PATH')
 NOTE_KEYS = dict(zip(('ID', 'USER', 'NOTE', 'STATUS'), os.getenv('NOTE_KEYS').split(',')))
 STATUSES_NAME = dict(zip(('not_started', 'in_progress', 'completed'), os.getenv("STATUSES_NAME").split(',')))
+# {
+#     "not_started": "your first status name",
+#     "in_progress": "second status name",
+#     "completed": "third status name"
+# }
+
 
 def validate_fernate_key(key_str: str) -> bool:
     try:
