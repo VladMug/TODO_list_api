@@ -13,3 +13,6 @@ venv/
 data/
 *.db
 *.sqlite3
+
+# Backups
+backups/
